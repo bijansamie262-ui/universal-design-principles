@@ -25,10 +25,12 @@ HEAD
   cat bijan-design-principles.html
   echo '__BIJAN_EOF__'
   echo
-  echo "block=\$(cat <<'__BIJAN_EOF__'"
+  # A plain heredoc, not one inside $(...): bash 3.2 (macOS sh) misparses quotes there.
+  echo "cat > \"\$dir/.bijan-block.tmp\" <<'__BIJAN_EOF__'"
+  echo '<!-- bijan-design-principles:start -->'
   cat global-CLAUDE.md
+  echo '<!-- bijan-design-principles:end -->'
   echo '__BIJAN_EOF__'
-  echo ')'
   cat <<'TAIL'
 
 file="$dir/CLAUDE.md"
@@ -36,7 +38,8 @@ touch "$file"
 awk '/^<!-- bijan-design-principles:start -->$/{skip=1} !skip{if($0==""){b++}else{while(b>0){print "";b--}print}} /^<!-- bijan-design-principles:end -->$/{skip=0}' "$file" > "$file.tmp"
 mv "$file.tmp" "$file"
 [ -s "$file" ] && printf '\n' >> "$file"
-printf '%s\n%s\n%s\n' '<!-- bijan-design-principles:start -->' "$block" '<!-- bijan-design-principles:end -->' >> "$file"
+cat "$dir/.bijan-block.tmp" >> "$file"
+rm "$dir/.bijan-block.tmp"
 echo "Installed Bijan's design principles into $dir"
 TAIL
 } > install.sh

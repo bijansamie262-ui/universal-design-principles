@@ -307,7 +307,8 @@ cat > "$dir/bijan-design-principles.html" <<'__BIJAN_EOF__'
 </html>
 __BIJAN_EOF__
 
-block=$(cat <<'__BIJAN_EOF__'
+cat > "$dir/.bijan-block.tmp" <<'__BIJAN_EOF__'
+<!-- bijan-design-principles:start -->
 # Bijan's design principles
 
 Before any design, UX, UI, product-logic or creative-experience decision, read `~/.claude/bijan-design-principles.html` in full (the text; the CSS is presentation). It is the complete guide and its reasoning governs the work.
@@ -324,13 +325,14 @@ Before any design, UX, UI, product-logic or creative-experience decision, read `
 ## Tooling
 - Run design retros inline: compare the outcome against the intent. (The /retro skill reviews the agent's setup, a different question.)
 - Reserve /wayfinder for multi-session work.
+<!-- bijan-design-principles:end -->
 __BIJAN_EOF__
-)
 
 file="$dir/CLAUDE.md"
 touch "$file"
 awk '/^<!-- bijan-design-principles:start -->$/{skip=1} !skip{if($0==""){b++}else{while(b>0){print "";b--}print}} /^<!-- bijan-design-principles:end -->$/{skip=0}' "$file" > "$file.tmp"
 mv "$file.tmp" "$file"
 [ -s "$file" ] && printf '\n' >> "$file"
-printf '%s\n%s\n%s\n' '<!-- bijan-design-principles:start -->' "$block" '<!-- bijan-design-principles:end -->' >> "$file"
+cat "$dir/.bijan-block.tmp" >> "$file"
+rm "$dir/.bijan-block.tmp"
 echo "Installed Bijan's design principles into $dir"
