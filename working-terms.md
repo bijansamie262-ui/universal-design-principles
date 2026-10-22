@@ -1,7 +1,3 @@
-# Bijan's design principles
-
-Before any design, UX, UI, product-logic or creative-experience decision, read `~/.claude/bijan-design-principles.html` in full (the text; the CSS is presentation). It is the complete guide and its reasoning governs the work.
-
 ## Working terms
 - **手応え** in every action: considered, satisfying interaction with an immediate functional response. Scale the care to how much the action matters.
 - Aim for purposeful immersion and fluent mastery.
